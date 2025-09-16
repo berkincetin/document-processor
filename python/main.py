@@ -15,7 +15,9 @@ import shutil
 class DocumentUploadManager:
     def __init__(self):
         self.api_base_url = "http://10.1.1.172:3820"
-        self.local_storage_dir = Path("C:/Users/User/Desktop/DOCUMENTS")
+        # self.local_storage_dir = Path("C:/Users/User/Desktop/DOCUMENTS")
+        self.local_storage_dir = Path("C:/Users/Polinity/Desktop/DOCUMENTS")
+
         self.local_storage_dir.mkdir(parents=True, exist_ok=True)
 
         # Desteklenen formatlar
@@ -367,12 +369,6 @@ class DocumentUploadManager:
             state="disabled",
         )
         self.process_button.pack(side=tk.LEFT, padx=5)
-
-        ttk.Button(
-            button_subframe,
-            text="Yerel Dosyaları Temizle",
-            command=self.clear_local_files,
-        ).pack(side=tk.LEFT, padx=5)
 
         # Progress bar
         self.progress = ttk.Progressbar(action_frame, mode="indeterminate")

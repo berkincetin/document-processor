@@ -15,8 +15,8 @@ import shutil
 class DocumentUploadManager:
     def __init__(self):
         self.api_base_url = "http://10.1.1.172:3820"
-        # self.local_storage_dir = Path("C:/Users/User/Desktop/DOCUMENTS")
-        self.local_storage_dir = Path("C:/Users/Polinity/Desktop/DOCUMENTS")
+        self.local_storage_dir = Path("C:/Users/User/Desktop/DOCUMENTS")
+        # self.local_storage_dir = Path("C:/Users/Polinity/Desktop/DOCUMENTS")
 
         self.local_storage_dir.mkdir(parents=True, exist_ok=True)
 

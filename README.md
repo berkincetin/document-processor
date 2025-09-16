@@ -1,29 +1,50 @@
-# DocUploader
+# 📄 Document Processor
 
-A Streamlit application to batch upload documents and trigger processing in a backend FastAPI server. 
+This project is a **Python + Tkinter** desktop application for managing document uploads, logging each operation, and tracking the process through a simple GUI.
 
-## Features
+## 🚀 Features
+- **Document Selection & Upload:** Select and upload multiple files at once.
+- **Hash Verification:** Automatically calculates file hashes to prevent duplicate uploads.
+- **Logging:** Stores file information in a local `upload_logs.db` SQLite database.
+- **Status Tracking:** Monitors file selection, upload, and processing status.
+- **Error Handling:** Saves error messages in the database and displays them in the interface.
 
-- Upload multiple files from a folder at once.
-- Automatically process all supported documents (.txt, .pdf, .docx, .md).
-- Metadata tracking: upload time, computer name, status, duplicate file checks.
-- Works with FastAPI backend
+## 🛠️ Requirements
+- Python 3.8+
+- Required dependencies:
+  ```bash
+  pip install -r requirements.txt
+  ```
+  *(If `requirements.txt` is missing, main dependencies include: `tkinter`, `requests`, `python-dotenv`)*
 
-## Installation:
+## 📦 Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/document-processor.git
+   cd document-processor/python
+   ```
 
-1. Clone the repo:
+2. Create and activate a virtual environment:
+   ```bash
+   python -m venv venv
+   venv\Scripts\activate  # On Windows
+   ```
 
-```bash
-https://github.com/berkincetin/document-processor.git
-cd document-processor
-python -m venv venv
-source venv/bin/activate  # Linux/macOS
-venv\Scripts\activate     # Windows
-pip install -r requirements.txt
-```
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Usage:
+4. Start the application:
+   ```bash
+   python main.py
+   ```
 
-```bash
-streamlit run main.py
-```
+## 💾 Database
+The application uses a local SQLite database (`upload_logs.db`) to store:
+- File names, hashes, and sizes
+- Selection, upload, and processing timestamps
+- Upload and processing status
+- Error messages (if any)
+
+If the database file is missing or deleted, it will be automatically recreated on the next run.

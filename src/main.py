@@ -1407,7 +1407,12 @@ class DocumentUploadManager:
 
     def generate_detail_report(self):
         """Detaylı rapor oluştur"""
+        # Günün tarihini gün_ay_yıl formatında al
+        today_str = datetime.now().strftime("%d_%m_%Y")
+        default_filename = f"detay_rapor_{today_str}.html"
+
         filepath = filedialog.asksaveasfilename(
+            initialfile=default_filename,
             defaultextension=".html",
             filetypes=[("HTML", "*.html"), ("CSV", "*.csv"), ("Tüm Dosyalar", "*.*")],
             title="Detaylı rapor kaydet",
@@ -1531,7 +1536,11 @@ class DocumentUploadManager:
 
     def generate_summary_report(self):
         """Özet rapor oluştur"""
+        today_str = datetime.now().strftime("%d_%m_%Y")
+        default_filename = f"ozet_rapor_{today_str}.html"
+
         filepath = filedialog.asksaveasfilename(
+            initialfile=default_filename,
             defaultextension=".html",
             filetypes=[("HTML", "*.html"), ("Tüm Dosyalar", "*.*")],
             title="Özet rapor kaydet",

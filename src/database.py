@@ -357,40 +357,30 @@ class DatabaseManager:
             cursor.execute(
                 """
                 UPDATE upload_logs 
-                SET processing_status = ?, processing_start_time = ?, updated_at = ?
+                SET processing_status = ?, processing_start_time = ?
                 WHERE upload_status = 'uploaded' AND processing_status = 'not_processed'
             """,
-                (status, current_time, current_time),
+                (status, current_time),
             )
         elif status == "completed":
-            # Duration hesapla
+            # Tüm uploaded dosyaları completed yap
             cursor.execute(
-                "SELECT id, processing_start_time FROM upload_logs WHERE processing_status = 'processing'"
+                """
+                UPDATE upload_logs 
+                SET processing_status = ?, processing_end_time = ?
+                WHERE upload_status = 'uploaded' AND processing_status = 'not_processed'
+            """,
+                (status, current_time),
             )
-            for row in cursor.fetchall():
-                file_id, start_time_str = row
-                duration = None
-                if start_time_str:
-                    start_time_obj = datetime.fromisoformat(start_time_str)
-                    duration = (datetime.now() - start_time_obj).total_seconds()
-
-                cursor.execute(
-                    """
-                    UPDATE upload_logs 
-                    SET processing_status = ?, processing_end_time = ?, processing_duration_seconds = ?, updated_at = ?
-                    WHERE id = ?
-                """,
-                    (status, current_time, duration, current_time, file_id),
-                )
         elif status == "failed":
             cursor.execute(
                 """
                 UPDATE upload_logs 
                 SET processing_status = ?, processing_end_time = ?, processing_error_message = ?, 
-                    retry_count = retry_count + 1, last_retry_time = ?, updated_at = ?
+                    retry_count = retry_count + 1, last_retry_time = ?
                 WHERE processing_status = 'processing'
             """,
-                (status, current_time, error_message, current_time, current_time),
+                (status, current_time, error_message, current_time),
             )
 
         conn.commit()
@@ -471,21 +461,20 @@ class DatabaseManager:
                 """
                 UPDATE upload_logs 
                 SET overwrite_count = overwrite_count + 1, 
-                    last_duplicate_time = ?, 
-                    updated_at = ?
+                    last_duplicate_time = ?
                 WHERE filename = ?
                 """,
-                (current_time, current_time, filename),
+                (current_time, filename),
             )
         else:
             # Sadece duplicate zamanını güncelle
             cursor.execute(
                 """
                 UPDATE upload_logs 
-                SET last_duplicate_time = ?, updated_at = ?
+                SET last_duplicate_time = ?
                 WHERE filename = ?
                 """,
-                (current_time, current_time, filename),
+                (current_time, filename),
             )
 
         conn.commit()

@@ -93,10 +93,17 @@ class FileManager:
             Kopyalama başarılı olup olmadığı
         """
         try:
-            if Path(target_path).exists() and not overwrite:
+            source = Path(source_path).resolve()
+            target = Path(target_path).resolve()
+
+            # Aynı dosya kontrolü
+            if source == target:
+                return True  # Aynı dosya, kopyalamaya gerek yok
+
+            if target.exists() and not overwrite:
                 return False
 
-            shutil.copy2(source_path, target_path)
+            shutil.copy2(source, target)
             return True
         except Exception as e:
             print(f"Dosya kopyalama hatası: {e}")

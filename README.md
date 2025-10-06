@@ -1,50 +1,127 @@
-# 📄 Document Processor
+# Document Upload Manager - Refactored
 
-This project is a **Python + Tkinter** desktop application for managing document uploads, logging each operation, and tracking the process through a simple GUI.
+Bu proje, dosya yükleme ve işleme işlemlerini yöneten modüler bir Python uygulamasıdır.
 
-## 🚀 Features
-- **Document Selection & Upload:** Select and upload multiple files at once.
-- **Hash Verification:** Automatically calculates file hashes to prevent duplicate uploads.
-- **Logging:** Stores file information in a local `upload_logs.db` SQLite database.
-- **Status Tracking:** Monitors file selection, upload, and processing status.
-- **Error Handling:** Saves error messages in the database and displays them in the interface.
+## Proje Yapısı
 
-## 🛠️ Requirements
-- Python 3.8+
-- Required dependencies:
-  ```bash
-  pip install -r requirements.txt
-  ```
-  *(If `requirements.txt` is missing, main dependencies include: `tkinter`, `requests`, `python-dotenv`)*
+```
+src/
+├── __init__.py              # Package initializer
+├── main_refactored.py       # Main application file (refactored)
+├── database.py              # Database operations
+├── file_manager.py          # File operations
+├── api_client.py            # API operations
+├── report_generator.py      # Report generation
+├── gui_components.py        # GUI components
+├── thread_manager.py        # Threading operations
+├── requirements.txt         # Dependencies
+└── README.md                # This file
+```
 
-## 📦 Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/document-processor.git
-   cd document-processor/python
-   ```
 
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   venv\Scripts\activate  # On Windows
-   ```
+## Modules
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 1. DatabaseManager (`database.py`)
+- SQLite database operations  
+- File log management  
+- API statistics  
+- Filtering and querying  
 
-4. Start the application:
-   ```bash
-   python main.py
-   ```
+### 2. FileManager (`file_manager.py`)
+- File selection and copying  
+- Hash calculation  
+- Duplicate detection  
+- Format validation  
 
-## 💾 Database
-The application uses a local SQLite database (`upload_logs.db`) to store:
-- File names, hashes, and sizes
-- Selection, upload, and processing timestamps
-- Upload and processing status
-- Error messages (if any)
+### 3. APIClient (`api_client.py`)
+- File upload API calls  
+- Embedding processing API calls  
+- Connection testing  
 
-If the database file is missing or deleted, it will be automatically recreated on the next run.
+### 4. ReportGenerator (`report_generator.py`)
+- HTML detailed reports  
+- HTML summary reports  
+- CSV reports  
+
+### 5. GUIComponents (`gui_components.py`)
+- Tkinter GUI components  
+- File selection dialogs  
+- Log display  
+- Filtering and sorting  
+
+### 6. ThreadManager (`thread_manager.py`)
+- Background operations  
+- Upload and process threads  
+
+## Usage
+
+### Simple Usage
+```python
+from main_refactored import DocumentUploadManager
+
+app = DocumentUploadManager()
+app.run()
+```
+
+### Modular Usage
+```python
+from database import DatabaseManager
+from file_manager import FileManager
+from api_client import APIClient
+
+# Modülleri ayrı ayrı kullanma
+db = DatabaseManager()
+file_mgr = FileManager("/path/to/storage", {".pdf", ".docx"})
+api = APIClient("http://api.example.com", {".pdf", ".docx"})
+```
+
+## Features
+
+- ✅ Modular structure  
+- ✅ Type hints  
+- ✅ Comprehensive docstrings  
+- ✅ Error handling  
+- ✅ Threading support  
+- ✅ Database logging  
+- ✅ Report generation  
+- ✅ File format validation  
+- ✅ Duplicate detection  
+- ✅ Progress tracking  
+
+## Requirements
+
+- Python 3.10+  
+- requests >= 2.28.0  
+- tkinter (comes with Python)  
+
+## Installation
+
+1. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Run the application:
+```bash
+python main_refactored.py
+```
+
+## Development
+
+### Adding a New Module
+1. Create the new module file  
+2. Add it to the `__init__.py` file  
+3. Add type hints and docstrings  
+4. Test it  
+
+### Code Standards
+- PEP 8 compliant code  
+- Type hints required  
+- Google style docstrings  
+- Error handling  
+- Logging  
+
+
+## Lisans
+
+This project is licensed under the MIT License.

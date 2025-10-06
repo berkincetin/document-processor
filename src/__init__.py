@@ -12,7 +12,7 @@ from .database import DatabaseManager
 from .file_manager import FileManager
 from .api_client import APIClient
 from .report_generator import ReportGenerator
-from .gui_components import GUIComponents
+from .modern_gui import ModernGUIComponents
 from .thread_manager import ThreadManager
 
 __all__ = [
@@ -21,6 +21,6 @@ __all__ = [
     "FileManager",
     "APIClient",
     "ReportGenerator",
-    "GUIComponents",
+    "ModernGUIComponents",
     "ThreadManager",
 ]

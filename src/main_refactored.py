@@ -14,7 +14,7 @@ from database import DatabaseManager
 from file_manager import FileManager
 from api_client import APIClient
 from report_generator import ReportGenerator
-from gui_components import GUIComponents
+from modern_gui import ModernGUIComponents
 from thread_manager import ThreadManager
 
 
@@ -34,6 +34,7 @@ class DocumentUploadManager:
         self.api_base_url = "http://10.1.1.172:3820"
         # self.api_base_url = "http://localhost:3820"
         self.local_storage_dir = "C:/Users/Polinity/Desktop/DOCUMENTS"
+        # self.local_storage_dir = Path("C:/Users/User/Desktop/DOCUMENTS")
         self.supported_formats = {".pdf", ".docx", ".doc", ".txt", ".md"}
 
         # Modülleri başlat
@@ -47,7 +48,7 @@ class DocumentUploadManager:
         self.thread_manager = ThreadManager(
             self.root, None
         )  # GUI'den sonra güncellenecek
-        self.gui = GUIComponents(
+        self.gui = ModernGUIComponents(
             self.root,
             self.file_manager,
             self.database_manager,

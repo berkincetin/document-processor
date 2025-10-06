@@ -101,6 +101,8 @@ class DatabaseManager:
         self._add_column_if_not_exists(
             cursor, "updated_at", "TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
         )
+        self._add_column_if_not_exists(cursor, "overwrite_count", "INTEGER DEFAULT 0")
+        self._add_column_if_not_exists(cursor, "last_duplicate_time", "TIMESTAMP NULL")
 
         conn.commit()
         conn.close()
@@ -415,6 +417,80 @@ class DatabaseManager:
         conn.close()
         return count > 0
 
+    def check_duplicate_by_name(self, filename: str) -> Optional[Dict[str, Any]]:
+        """
+        Aynı isimde dosya daha önce yüklendi mi kontrol et.
+
+        Args:
+            filename: Dosya adı
+
+        Returns:
+            Duplicate bilgileri veya None
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+
+        cursor.execute(
+            """
+            SELECT id, selection_time, overwrite_count, last_duplicate_time
+            FROM upload_logs 
+            WHERE filename = ? 
+            ORDER BY selection_time DESC 
+            LIMIT 1
+            """,
+            (filename,),
+        )
+        result = cursor.fetchone()
+
+        conn.close()
+
+        if result:
+            return {
+                "id": result[0],
+                "last_time": result[1],
+                "overwrite_count": result[2] or 0,
+                "last_duplicate_time": result[3],
+            }
+        return None
+
+    def update_duplicate_info(self, filename: str, is_overwrite: bool = False) -> None:
+        """
+        Duplicate bilgilerini güncelle.
+
+        Args:
+            filename: Dosya adı
+            is_overwrite: Overwrite işlemi mi
+        """
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        current_time = datetime.now().isoformat()
+
+        if is_overwrite:
+            # Overwrite sayacını artır
+            cursor.execute(
+                """
+                UPDATE upload_logs 
+                SET overwrite_count = overwrite_count + 1, 
+                    last_duplicate_time = ?, 
+                    updated_at = ?
+                WHERE filename = ?
+                """,
+                (current_time, current_time, filename),
+            )
+        else:
+            # Sadece duplicate zamanını güncelle
+            cursor.execute(
+                """
+                UPDATE upload_logs 
+                SET last_duplicate_time = ?, updated_at = ?
+                WHERE filename = ?
+                """,
+                (current_time, current_time, filename),
+            )
+
+        conn.commit()
+        conn.close()
+
     def get_filtered_logs(self, filters: Dict[str, Any]) -> List[Tuple]:
         """
         Filtrelenmiş logları getir.
@@ -429,7 +505,8 @@ class DatabaseManager:
             SELECT filename, file_extension, file_size, user_name, selection_time, 
                    upload_end_time, upload_duration_seconds, processing_end_time, 
                    processing_duration_seconds, upload_status, processing_status, 
-                   is_duplicate, upload_error_message, processing_error_message
+                   is_duplicate, upload_error_message, processing_error_message,
+                   overwrite_count, last_duplicate_time
             FROM upload_logs 
             WHERE 1=1
         """

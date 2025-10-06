@@ -1,1 +1,10 @@
-requests
+# Document Upload Manager - Requirements
+# Refactor edilmiş versiyon için gerekli paketler
+
+requests>=2.28.0
+
+# Opsiyonel paketler (geliştirme için)
+# pytest>=7.0.0
+# black>=22.0.0
+# flake8>=4.0.0
+# mypy>=0.950
